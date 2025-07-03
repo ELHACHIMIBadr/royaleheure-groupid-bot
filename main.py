@@ -1,28 +1,30 @@
 import os
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram import Update
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters
+)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Commande /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "Bienvenue sur le bot RoyaleHeure 📦\nEnvoyez-moi une commande client pour commencer."
-    )
+    await update.message.reply_text("Bienvenue sur le bot RoyaleHeure !")
 
-# Gestion des messages (exemple basique)
+# Message libre (texte)
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_input = update.message.text
-    # Tu peux ici traiter l’entrée utilisateur, extraire nom, numéro, etc.
-    await update.message.reply_text(f"Commande reçue : {user_input}")
+    await update.message.reply_text(f"Vous avez dit : {update.message.text}")
 
 def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    app.run_polling()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
