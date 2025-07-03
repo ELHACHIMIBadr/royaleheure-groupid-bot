@@ -8,15 +8,13 @@ from telegram.ext import (
     filters
 )
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")  # Assure-toi que la variable est bien définie sur Render
 
-# Commande /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Bienvenue sur le bot RoyaleHeure !")
 
-# Message libre (texte)
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"Vous avez dit : {update.message.text}")
+    await update.message.reply_text(f"Message reçu : {update.message.text}")
 
 def main():
     application = ApplicationBuilder().token(BOT_TOKEN).build()
