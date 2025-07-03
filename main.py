@@ -1,18 +1,19 @@
 import os
-from telegram.ext import ApplicationBuilder, MessageHandler, filters
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
+# On récupère les variables d'environnement
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = os.getenv("ADMIN_ID")
 
-def get_group_id(update, context):
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     if chat.type in ['group', 'supergroup']:
-        group_id = chat.id
-        context.bot.send_message(chat_id=chat.id, text=f"✅ Groupe détecté : `{group_id}`", parse_mode="Markdown")
+        await update.message.reply_text(f"Group ID: {chat.id}")
+    else:
+        await update.message.reply_text("Merci de m’ajouter dans un groupe pour détecter son ID.")
 
-updater = Updater(token=BOT_TOKEN, use_context=True)
-dispatcher = updater.dispatcher
-
-dispatcher.add_handler(MessageHandler(Filters.all, get_group_id))
-
-print("🤖 Bot en ligne. Envoie un message dans ton groupe Telegram...")
-updater.start_polling()
+if __name__ == '__main__':
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    app.run_polling()
