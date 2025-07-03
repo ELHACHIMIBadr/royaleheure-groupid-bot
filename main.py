@@ -1,5 +1,5 @@
 import os
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import ApplicationBuilder, MessageHandler, filters
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
